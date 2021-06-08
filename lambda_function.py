@@ -1,7 +1,7 @@
 import kobo_crawler
 import gcal
 
-if __name__ == '__main__':
+def lambda_handler(event, context):
     # get articles about 99 sale
     articles = kobo_crawler.get99Articles();
     if (not len(articles)):
@@ -22,3 +22,8 @@ if __name__ == '__main__':
     for book in books:
         if gcal.eventByBookId(events, book['id']): continue;
         gcal.create_event(book)
+
+    return "done"
+
+if __name__ == "__main__":
+    lambda_handler('', '')

@@ -1,1 +1,4 @@
+output
+*.zip
 credentials.json
+requirements.txt
