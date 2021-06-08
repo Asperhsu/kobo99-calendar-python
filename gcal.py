@@ -28,12 +28,9 @@ def create_event(book):
 
     body = {
         "summary": book['title'],
-        "description": "".join([
-            f"<p>Kobo <a href='{book['bookLink']}'>{book['bookLink']}</a>",
-            f"<p>Blog <a href='{book['blogLink']}'>{book['blogLink']}</a>",
-        ]),
-        "start": {"date": book['saleDate'].isoformat(), "timeZone": 'Asia/Taipei'},
-        "end": {"date": book['saleDate'].isoformat(), "timeZone": 'Asia/Taipei'},
+        "description": book['description'],
+        "start": {"date": book['date'].isoformat(), "timeZone": 'Asia/Taipei'},
+        "end": {"date": book['date'].isoformat(), "timeZone": 'Asia/Taipei'},
         "extendedProperties": {
             "shared": {
                 "id": book['id']
