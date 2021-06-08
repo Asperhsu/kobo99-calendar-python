@@ -1,0 +1,49 @@
+from googleapiclient.discovery import build
+from google.oauth2 import service_account
+
+SCOPES = ['https://www.googleapis.com/auth/calendar']
+SERVICE_ACCOUNT_FILE = 'credentials.json'
+CALENDAR_ID = 'rcmvnfej75s7c9sjdbic1f55v8@group.calendar.google.com'
+
+def get_calendar_service():
+    credentials = service_account.Credentials.from_service_account_file(
+        SERVICE_ACCOUNT_FILE, scopes=SCOPES)
+    return build('calendar', 'v3', credentials=credentials)
+
+def list_events(mindate, maxdate):
+    service = get_calendar_service()
+
+    events_result = service.events().list(
+        calendarId=CALENDAR_ID,
+        timeMin=mindate.isoformat()  + 'T00:00:00+08:00',
+        timeMax=maxdate.isoformat()  + 'T23:59:59+08:00',
+        singleEvents=True,
+        orderBy='startTime'
+    ).execute()
+    events = events_result.get('items', [])
+    return events
+
+def create_event(book):
+    service = get_calendar_service()
+
+    body = {
+        "summary": book['title'],
+        "description": "".join([
+            f"<p>Kobo <a href='{book['bookLink']}'>{book['bookLink']}</a>",
+            f"<p>Blog <a href='{book['blogLink']}'>{book['blogLink']}</a>",
+        ]),
+        "start": {"date": book['saleDate'].isoformat(), "timeZone": 'Asia/Taipei'},
+        "end": {"date": book['saleDate'].isoformat(), "timeZone": 'Asia/Taipei'},
+        "extendedProperties": {
+            "shared": {
+                "id": book['id']
+            }
+        }
+    }
+    event_result = service.events().insert(calendarId=CALENDAR_ID, body=body).execute()
+    print("created event",  book['id'])
+
+def eventByBookId(events, id):
+    for event in events:
+        if event.get('extendedProperties', {}).get('shared', {}).get('id') == id: return event;
+    return None;

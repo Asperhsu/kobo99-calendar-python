@@ -1,66 +1,23 @@
-import requests
+import kobo_crawler
+import gcal
 from datetime import date
-from pathlib import Path
-from bs4 import BeautifulSoup
 
+if __name__ == '__main__':
+    articles = kobo_crawler.get99Articles();
+    if (not len(articles)):
+        print('no artcles')
+        exit(0)
 
-def get99Articles():
-    host = 'https://tw.news.kobo.com'
-    # html_doc = requests.get(host + '/%E5%B0%88%E9%A1%8C%E4%BC%81%E5%8A%83/%E5%A5%BD%E8%AE%80%E6%9B%B8%E5%96%AE').text
-    filename = Path("./kobo_list.htm").resolve()
-    with open(filename) as f:
-        html_doc = f.read()
-
-    soup = BeautifulSoup(html_doc, 'html.parser')
-
-    items = []
-    for item in soup.select('.blog-item'):
-        title = item.select_one('.blog-item-text-title:-soup-contains("一週99")');
-        if title is None:
-            continue
-
-        items.append({
-            "link": host + item.select_one("a.blog-item-container").get('href'),
-            "title": title.string.strip(),
-        })
-    return items
-
-def parseSaleDate(elements):
-    try:
-        dateString = "".join(list(map(lambda span: "" if span.string is None else span.string, elements))).split()
-        if not len(dateString): return None
-
-        (month, day) = dateString[0].split('/')
-        return date.today().replace(month=int(month), day=int(day))
-    except:
-        return None
-
-def getArticleBooks(link):
-    # html_doc = requests.get(link).text
-    filename = Path("./kobo_article.htm").resolve()
-    with open(filename) as f:
-        html_doc = f.read()
-
-    soup = BeautifulSoup(html_doc, 'html.parser')
-
-    books = []
-    for p in soup.select(".article-body p:has(> span + a[title])"):
-        saleDate = parseSaleDate(p.select('span'))
-        if (not isinstance(saleDate, date)): continue
-
-        href = p.a.get('href')
-        if (any(book['bookLink'] == href for book in books)): continue
-
-        books.append({
-            "title": p.a.get('title'),
-            "saleDate": saleDate,
-            "bookLink": href,
-            "blogLink": link,
-        })
-    return books
-
-articles = get99Articles();
-if (len(articles)):
     link = articles[0]['link']
-    books = getArticleBooks(link)
-    print(link, books)
+    books = kobo_crawler.getArticleBooks(link)
+    print(books)
+    if (not len(books)):
+        print('no books')
+        exit(0)
+
+    # dates = sorted([book['saleDate'] for book in books])
+    # events = gcal.list_events(dates[0], dates[-1])
+
+    # for book in books:
+    #     if gcal.eventByBookId(events, book['id']): continue;
+    #     gcal.create_event(book)
