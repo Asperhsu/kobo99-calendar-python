@@ -38,9 +38,9 @@ def create_event(book):
         }
     }
     event_result = service.events().insert(calendarId=CALENDAR_ID, body=body).execute()
-    print("created event",  book['id'])
+    print("Event created:",  book['title'])
 
-def eventByBookId(events, id):
+def event_by_book_id(events, id):
     for event in events:
         if event.get('extendedProperties', {}).get('shared', {}).get('id') == id: return event;
     return None;
