@@ -1,3 +1,4 @@
+from datetime import timedelta
 from googleapiclient.discovery import build
 from google.oauth2 import service_account
 
@@ -30,7 +31,7 @@ def create_event(book):
         "summary": book['title'],
         "description": book['description'],
         "start": {"date": book['date'].isoformat(), "timeZone": 'Asia/Taipei'},
-        "end": {"date": book['date'].isoformat(), "timeZone": 'Asia/Taipei'},
+        "end": {"date": (book['date'] + timedelta(days=1)).isoformat(), "timeZone": 'Asia/Taipei'},
         "extendedProperties": {
             "shared": {
                 "id": book['id']
