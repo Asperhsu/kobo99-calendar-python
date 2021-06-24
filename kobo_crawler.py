@@ -77,15 +77,7 @@ def format_description(soup, book_link, blog_url):
 
     # box description
     for p in soup.select(f'div.simplebox-content:has(a[href="{book_link}"]) > p'):
-        desc = ""
-        for content in p.contents:
-            if content.name is None:
-                desc += content
-            elif content.name == 'a':
-                desc += f'<a href="{content.get("href")}">{content.string}</a>'
-            elif content.name == 'span':
-                desc += content.string
-        descs.append('<div>' + desc + '</div>')
+        descs.append('<div>' + p.encode_contents().decode('utf-8') + '</div>')
 
     descs.append(f'<div>來源：<a href="{blog_url}">{blog_url}</a></div>')
 
