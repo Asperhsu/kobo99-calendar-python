@@ -5,14 +5,14 @@ def lambda_handler(event, context):
     # get articles about 99 sale
     articles = kobo_crawler.fetch_articles();
     if (not len(articles)):
-        print('no artcles')
+        return 'no artcles'
         exit(0)
 
     # get first (latest) article to retrive books info
     link = articles[0]['link']
     books = kobo_crawler.fetch_books(link)
     if (not len(books)):
-        print('no books')
+        return 'no books'
         exit(0)
 
     # get exists event between dates for check if exists

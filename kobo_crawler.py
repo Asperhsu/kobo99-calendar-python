@@ -1,4 +1,5 @@
 import requests
+import re
 from hashlib import md5
 from datetime import date
 from bs4 import BeautifulSoup
@@ -29,7 +30,7 @@ def fetch_books(link):
 
     books = []
     for p in soup.select('.article-body p:-soup-contains("選書")'):
-        sale_date = parse_sale_date(p.select('span'))
+        sale_date = parse_sale_date(p)
         if (not isinstance(sale_date, date)): continue
 
         # book link
@@ -50,12 +51,12 @@ def fetch_books(link):
         })
     return books
 
-def parse_sale_date(elements):
+def parse_sale_date(p):
     try:
-        date_str = "".join(list(map(lambda span: "" if span.string is None else span.string, elements))).split()
-        if not len(date_str): return None
+        match = re.search(r'^([0-9]{1,2}\/[0-9]{1,2}).+選書', p.get_text())
+        if match is None: return None
 
-        (month, day) = date_str[0].split('/')
+        (month, day) = match.group(1).split('/')
         return date.today().replace(month=int(month), day=int(day))
     except:
         return None
