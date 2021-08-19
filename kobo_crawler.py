@@ -53,10 +53,11 @@ def fetch_books(link):
 
 def parse_sale_date(p):
     try:
-        match = re.search(r'^([0-9]{1,2}\/[0-9]{1,2}).+選書', p.get_text())
+        match = re.findall(r'^([0-9]{1,2}\/[0-9]{1,2}).+選書', p.get_text(), re.MULTILINE)
         if match is None: return None
+        if len(match) == 0: return None
 
-        (month, day) = match.group(1).split('/')
+        (month, day) = match[0].split('/')
         return date.today().replace(month=int(month), day=int(day))
     except:
         return None
