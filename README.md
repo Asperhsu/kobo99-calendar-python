@@ -12,7 +12,7 @@
 ## 爬蟲動作
 - 於 [Kobo Blog 好讀書單](https://tw.news.kobo.com/%E5%B0%88%E9%A1%8C%E4%BC%81%E5%8A%83/%E5%A5%BD%E8%AE%80%E6%9B%B8%E5%96%AE) 中尋找最新的一週99書單文章
 - 尋找 "mm/dd 週x選書" 文字，爬取 書本連結 與 書名
-- 根據書本連結尋找對應的 .textImage 內的圖片 與 .simplebox-content 內的書本資訊
+- 根據書本連結尋找對應的 .book-block 內的書本資訊
 - 新增至 Google Calendar
 
 ## pipenv pack packages to zip (aws lambda)

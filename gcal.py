@@ -4,7 +4,9 @@ from google.oauth2 import service_account
 
 SCOPES = ['https://www.googleapis.com/auth/calendar']
 SERVICE_ACCOUNT_FILE = 'credentials.json'
-CALENDAR_ID = 'rcmvnfej75s7c9sjdbic1f55v8@group.calendar.google.com'
+CALENDAR_PROD_ID = 'rcmvnfej75s7c9sjdbic1f55v8@group.calendar.google.com'
+CALENDAR_TEST_ID = 'rqcl9m6ucfca9vp67afvi3bdhk@group.calendar.google.com'
+CALENDAR_ID = CALENDAR_PROD_ID
 
 def get_calendar_service():
     credentials = service_account.Credentials.from_service_account_file(

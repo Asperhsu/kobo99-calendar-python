@@ -3,7 +3,7 @@ import gcal
 
 def lambda_handler(event, context):
     # get articles about 99 sale
-    articles = kobo_crawler.fetch_articles();
+    articles = kobo_crawler.fetch_articles()
     if (not len(articles)):
         return 'no artcles'
         exit(0)
