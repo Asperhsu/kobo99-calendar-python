@@ -82,7 +82,8 @@ def format_description(soup, book_link, blog_url):
     # get img html
     img = block.select_one('img')
     if (not img is None):
-        descs.append(img.prettify())
+        src = img.get('src')
+        descs.append(f'<img src="{src}" width="100%" height="auto">')
 
     # get title
     title = block.select_one('span.title')
