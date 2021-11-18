@@ -6,8 +6,7 @@ from bs4 import BeautifulSoup
 
 def fetch_articles():
     print('fetch articles list')
-    host = 'https://www.kobo.com/zh/blog/'
-    html = requests.get(host + 'blog/%E5%A5%BD%E8%AE%80%E6%9B%B8%E5%96%AE').text
+    html = requests.get('https://www.kobo.com/zh/blog').text
 
     soup = BeautifulSoup(html, 'html.parser')
 
