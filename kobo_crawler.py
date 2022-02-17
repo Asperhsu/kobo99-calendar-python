@@ -4,10 +4,15 @@ from hashlib import md5
 from datetime import date
 from bs4 import BeautifulSoup
 
+headers = {
+    'Accept': 'text/html',
+    'Host': 'www.kobo.com',
+    'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.102 Safari/537.36 Edg/98.0.1108.55',
+}
+
 def fetch_articles():
     print('fetch articles list')
-    html = requests.get('https://www.kobo.com/zh/blog').text
-
+    html = requests.get('https://www.kobo.com/zh/blog', verify=False, timeout=10, headers=headers).text
     soup = BeautifulSoup(html, 'html.parser')
 
     items = []
@@ -24,7 +29,7 @@ def fetch_articles():
 
 def fetch_books(link):
     print('find books in: ' + link)
-    html = requests.get(link).text
+    html = requests.get(link, verify=False, timeout=10, headers=headers).text
     soup = BeautifulSoup(html, 'html.parser')
 
     books = []
